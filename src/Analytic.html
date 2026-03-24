@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="style.css">
+        <meta charset="UTF-8">
+        <title>Аналитика</title>
+    </head>
+        <header>
+        <nav class="navbar">
+            <ul class="nav-links">
+                <li><a href = "Home.html">Главная</a></li>
+                <li><a href = "Tasks.html">Задачи</a></li>
+                <li><a href = "Analytic.html" class="active">Аналитика</a></li>
+                <li><a href = "Calendar.html">Календарь</a></li>
+                <li><a href = "Profile.html">Профиль</a></li>
+            </ul>
+        </nav>
+    </header>
+    <body>
+        <hr>
+        <h1>Аналитика</h1>
+        <div id="analytics-grid" class="grid-container"></div>
+            <template id = "card-template">
+            <div class="card">
+                <h3 class="card-title"></h3>
+                <p class="card-date"></p>
+                <p class="card-id"></p>
+            </template>
+        </div>
+        <script src="scripts/analytic.js"></script>
+    </body>
+</html>

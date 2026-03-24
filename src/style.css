@@ -1,0 +1,200 @@
+.navbar{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: rgb(104, 161, 236);
+    padding: auto;
+    margin: auto;
+    color: white;
+}
+
+.navbar .logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+
+
+.nav-links{
+    list-style: none;
+    display: flex;
+    gap: 1.5rem;
+}
+
+.nav-links a {
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.nav-links a.active{
+  background-color: rgba(255, 255, 255, 0.2);
+  padding: 5px 15px;
+  border-radius: 50px;
+}
+
+.nav-links a:hover {
+  color: #808080;
+}
+
+.nav-buttons{
+  border:rgb(93, 144, 211)
+}
+
+h1{
+  text-align: center;
+}
+
+.home-tasks{
+  width: 90%;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 20px;
+}
+
+img{
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.profile-info p{
+  text-align: center;
+  font-size: 25px;
+
+}
+
+.task-status-bar{
+  width: 30%;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 20px;
+  text-align: center;
+}
+
+
+
+
+
+/* СЕТКИ И КАРТОЧКИ */
+
+.home-tasks {
+    display: flex; /* Делает колонки в ряд и одинаковой высоты */
+    justify-content: space-between;
+    align-items: stretch; /* Растягивает содержимое */
+    gap: 10px;
+    padding: 20px;
+}
+
+.column-33 {
+    flex: 1; /* Колонки делят место поровну */
+    text-align: center;
+}
+
+/* Красивая вертикальная линия */
+.vert-line {
+    width: 2px;
+    background-color: #e0e0e0;
+    margin: 20px 0; /* ОТСТУПЫ СВЕРХУ И СНИЗУ (чтобы не касалась краев) */
+    align-self: stretch; /* Линия тянется по высоте контейнера */
+}
+
+
+.grid-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+    max-width: 400px;
+    padding: 20px;
+}
+
+.card {
+    cursor: pointer; /* Делает курсор "ручкой" */
+    transition: all 0.2s ease; /* Плавная анимация */
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    padding: 20px;
+    background: #fff;
+}
+
+/* Эффект при наведении */
+.card:hover {
+    background-color: #f0f7ff; /* Слегка меняем фон на голубоватый */
+    border-color: #3498db;     /* Подсвечиваем рамку */
+    transform: translateY(-3px); /* Карточка чуть-чуть приподнимается */
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1); /* Тень становится глубже */
+}
+
+/* Эффект при нажатии */
+.card:active {
+    transform: translateY(-1px);
+    background-color: #e6f2ff;
+}
+
+
+/* АУТЕНТИФИКАЦИЯ / РЕГИСТРАЦИЯ */
+.center-container{
+    display: flex;
+    justify-content: center; /* это чтоб по горизонтали центр*/
+    align-items: center;
+    min-height: calc(100vh - 70px); /* высота экрана минус шапка*/
+    background-color: #f4f7f6;
+}
+
+.auth-card{
+    background: white;
+    padding: 40px;
+    border-radius: 12px;
+    width: 100%;
+    max-width: 450px;
+    text-align: center;
+}
+
+.auth-card h1{
+    margin-bottom: 20px;
+    color: #333;
+}
+
+
+.input-group{
+    text-align: left;
+    margin-bottom: 15px;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #555;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    box-sizing: border-box; /* чтоб паддинг не вылезал за границы */
+}
+
+.btn-submit {
+    width: 100%;
+    padding: 12px;
+    background-color: rgb(93, 144, 211); 
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.btn-submit:hover {
+    background-color: rgb(93, 144, 211);
+}
+
+.form-footer {
+    margin-top: 15px;
+    font-size: 14px;
+    color: #777;
+}

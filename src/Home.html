@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ru">
+    <head>
+        <link rel="stylesheet" href="style.css">
+        <meta charset="UTF-8">
+        <meta name = "description", content="Главная страница, в которой отображены 3 столбца-статуса работы задач">
+        <title>Панель оператора</title>
+    </head>
+    <header>
+        <nav class="navbar">
+            <ul class="nav-links">
+                <li><a href = "Home.html" class="active">Главная</a></li>
+                <li><a href = "Tasks.html">Задачи</a></li>
+                <li><a href = "Analytic.html">Аналитика</a></li>
+                <li><a href = "Calendar.html">Календарь</a></li>
+                <li><a href = "Profile.html">Профиль</a></li>
+            </ul>
+        </nav>
+    </header>
+    <body>
+        
+        <hr>
+        <h1>Главная</h1>
+        <div class="home-tasks">
+            
+            <div id="send" class="column-33">
+                <h3>Отправлено</h3>
+                <div id="list-new"></div>
+            </div>
+
+            <div class="vert-line"></div>
+
+            <div id="in-progress" class="column-33">
+                <h3>В прогрессе</h3>
+                <div id="list-progress"></div>
+            </div>
+
+            <div class="vert-line"></div>
+
+            <div id="done" class="column-33">
+                <h3>Сделано</h3>
+                <div id="list-done"></div>
+            </div>
+        </div>
+        <template id = "card-template">
+        <div class="card">
+            <h3 class="card-title"></h3>
+            <p class="card-id"></p>
+        </template>
+        <script src="scripts/home.js"></script>
+    </body>
+</html>

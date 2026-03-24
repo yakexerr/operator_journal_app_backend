@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ru">
+    <head>
+        <link rel="stylesheet" href="style.css">
+        <meta charset="UTF-8">
+        <title>Профиль</title>
+    </head>
+    <header>
+        <nav class="navbar">
+            <ul class="nav-links">
+                <li><a href = "Home.html">Главная</a></li>
+                <li><a href = "Tasks.html">Задачи</a></li>
+                <li><a href = "Analytic.html">Аналитика</a></li>
+                <li><a href = "Calendar.html">Календарь</a></li>
+                <li><a href = "Profile.html" class="active">Профиль</a></li>
+            </ul>
+        </nav>
+    </header>
+    <body>
+        <hr>
+        <h1>Профиль</h1>
+        <img src="assets/trut.jpg" alt="Фото профиля" style="border-radius: 50%; width: 150px; height: 150px; object-fit: cover;" >
+        <div class="profile-info">
+            <p>Имя: <span id="user-name">Загрузка...</span></p>
+            <p>Фамилия: <span id="user-lastname">Загрузка...</span></p>
+            <p>Должность: <span id="user-position">Загрузка...</span></p>
+        </div>
+        <script src="scripts/profile.js"></script>
+    </body>
+</html>

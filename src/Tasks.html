@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ru">
+    <head>
+        <link rel="stylesheet" href="style.css">
+        <meta charset="UTF-8">
+        <title>Задачи</title>
+    </head>
+        <header>
+        <nav class="navbar">
+            <ul class="nav-links">
+                <li><a href = "Home.html">Главная</a></li>
+                <li><a href = "Tasks.html" class="active">Задачи</a></li>
+                <li><a href = "Analytic.html">Аналитика</a></li>
+                <li><a href = "Calendar.html">Календарь</a></li>
+                <li><a href = "Profile.html">Профиль</a></li>
+            </ul>
+        </nav>
+    </header>
+    <body>
+        <hr>
+        <h1>Назначить новую задачу</h1>
+
+        <div style="margin: 20px auto; width: 300px; text-align: left;">
+            <label><b>Название задачи:</b></label><br>
+            <input type="text" id="taskTitle" placeholder="Например: Замер КПД" style="width: 100%; padding: 8px; margin-bottom: 15px;">
+
+            <fieldset>
+                <legend>Выберите объект</legend>
+                <!-- value — это ID для базы, data-name — красивое имя для мобилки -->
+                <input type="radio" id="obj1" name="object" value="101" data-name="Скважина №1" checked>
+                <label for="obj1">Скважина №1</label><br>
+
+                <input type="radio" id="obj2" name="object" value="102" data-name="Скважина №2">
+                <label for="obj2">Скважина №2</label><br>
+
+                <input type="radio" id="obj3" name="object" value="103" data-name="Скважина №3">
+                <label for="obj3">Скважина №3</label>
+            </fieldset>
+            <br>
+            <fieldset>
+                <legend>Выберите замеры (формулы)</legend>
+                <!-- value должен СТРОГО совпадать с formulaId во Flutter -->
+                <input type="checkbox" name="zamer" value="pump_efficiency" id="zam1">
+                <label for="zam1">Эффективность насоса</label><br>
+
+                <input type="checkbox" name="zamer" value="hidrostatic_pressure" id="zam2">
+                <label for="zam2">Гидрост. давление</label><br>
+                
+                <input type="checkbox" name="zamer" value="v_otkr_stvola" id="zam3">
+                <label for="zam3">Объём ствола</label>
+            </fieldset>
+            <br>
+            <button id="assignBtn" class="btn-submit">ОТПРАВИТЬ ОПЕРАТОРУ</button>
+            <p id="statusMessage" style="text-align: center;"></p>
+        </div>
+
+        <!-- Подключаем скрипт -->
+        <script src="scripts/tasks.js"></script>
+</html>
