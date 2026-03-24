@@ -1,6 +1,6 @@
 async function updateAnalytics() {
     try {
-        const response = await fetch('http://85.209.129.205:3000/reports');
+        const response = await fetch('/reports');
         const data = await response.json();
         
         const grid = document.getElementById('analytics-grid');

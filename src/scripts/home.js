@@ -1,6 +1,6 @@
 async function updateHome(){
     try{
-        const response = await fetch('http://85.209.129.205:3000/dashboard-tasks');
+        const response = await fetch('/dashboard-tasks');
         const data = await response.json();
 
         // находим наши контейнеры

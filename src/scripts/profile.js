@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', async function() {
 
     try {
         // спрашиваем у сервера данные
-        const response = await fetch(`http://85.209.129.205:3000/user-info/${login}`);
+        const response = await fetch(`/user-info/${login}`);
         
         if (response.ok) {
             const userData = await response.json();

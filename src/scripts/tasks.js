@@ -24,7 +24,7 @@ document.getElementById('assignBtn').addEventListener('click', async function() 
     };
 
     try {
-        const response = await fetch('http://85.209.129.205:3000/task', {
+        const response = await fetch('/task', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(taskData)
