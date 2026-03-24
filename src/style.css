@@ -198,3 +198,39 @@ img{
     font-size: 14px;
     color: #777;
 }
+
+/*ДЛЯ ЗАДАЧ*/
+
+fieldset label {
+  display: block; 
+  margin-bottom: 8px; /* Расстояние между строками */
+  cursor: pointer;
+}
+
+fieldset label input {
+  margin-right: 10px;
+  vertical-align: middle;
+}
+
+/* Контейнер для одной строки */
+.checkbox-row {
+  display: flex;          /* Включаем гибкий контейнер */
+  align-items: center;    /* Выравниваем иконку и текст строго по центру по вертикали */
+  margin-bottom: 10px;    /* Расстояние между строчками */
+  cursor: pointer;        /* Чтобы при наведении был "пальчик" */
+}
+
+/* Расстояние между самим кружочком/квадратиком и текстом */
+.checkbox-row input {
+  margin: 0 10px 0 0;     /* Отступ только справа */
+  width: 18px;            /* Можно чуть увеличить размер для удобства */
+  height: 18px;
+}
+
+/* Убираем лишние отступы у fieldset, чтобы выглядело аккуратнее */
+fieldset {
+  border: 1px solid #ccc;
+  padding: 15px;
+  border-radius: 8px;
+  margin-top: 20px;
+}
