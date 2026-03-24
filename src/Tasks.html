@@ -39,15 +39,46 @@
             <br>
             <fieldset>
                 <legend>Выберите замеры (формулы)</legend>
-                <!-- value должен СТРОГО совпадать с formulaId во Flutter -->
                 <input type="checkbox" name="zamer" value="pump_efficiency" id="zam1">
                 <label for="zam1">Эффективность насоса</label><br>
 
                 <input type="checkbox" name="zamer" value="hidrostatic_pressure" id="zam2">
                 <label for="zam2">Гидрост. давление</label><br>
+
+                <input type="checkbox" name="zamer" value="universal_gas_formula" id="zam4">
+                <label for="zam4">Универсальная газовая формула</label>
+
+                <input type="checkbox" name="zamer" value="v_obsash_stvola" id="zam5">
+                <label for="zam5">Объём обсаженного ствола скважины</label>
                 
                 <input type="checkbox" name="zamer" value="v_otkr_stvola" id="zam3">
-                <label for="zam3">Объём ствола</label>
+                <label for="zam3">Объём открытого ствола</label>
+
+                <input type="checkbox" name="zamer" value="v_skv_bez_instr" id="zam6">
+                <label for="zam6">Объём скважины без инструмента</label>
+
+                <input type="checkbox" name="zamer" value="v_skv_s_instr" id="zam7">
+                <label for="zam7">Объём скважины с инструментом</label>
+
+                <input type="checkbox" name="zamer" value="v_zatruba" id="zam8">
+                <label for="zam8">Объём затруба</label>
+
+                <input type="checkbox" name="zamer" value="t_prok_trub_v" id="zam9">
+                <label for="zam9">Время прокачивания трубного объёма</label>
+
+                <input type="checkbox" name="zamer" value="t_prokach_all_v_shidk" id="zam10">
+                <label for="zam10">Время прокачивания всего объёма скважины объёма</label>
+
+                <input type="checkbox" name="zamer" value="t_vim_zatrub_protsr" id="zam11">
+                <label for="zam11">Время вымыва затрубного пространства</label>
+
+                <input type="checkbox" name="zamer" value="v_v_instrum" id="zam12">
+                <label for="zam12">Объём в инструменте</label>
+
+                <input type="checkbox" name="zamer" value="v_metalla" id="zam13">
+                <label for="zam13">Объём металла</label>
+
+
             </fieldset>
             <br>
             <button id="assignBtn" class="btn-submit">ОТПРАВИТЬ ОПЕРАТОРУ</button>
