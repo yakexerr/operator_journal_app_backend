@@ -18,12 +18,12 @@ async function updateAnalytics() {
             const date = item.created_at ? new Date(item.created_at).toLocaleString() : "Дата не указана";
             clone.querySelector('.card-date').textContent = date;
             
-            clone.querySelector('.card-id').textContent = `Задача №${item.taskId} | Объект: ${item.objectId}`;
+            clone.querySelector('.card-id').textContent = `Задача №${item.taskId} | Скважина: ${item.objectId}`;
 
             // клик по карточке — показываем все данные в алерте (мини-окно)
             cardElement.onclick = () => {
                 let info = `ОТЧЕТ: ${item.title}\n`;
-                info += `Объект: ${item.objectName}\n`;
+                info += `Скважина: ${item.objectName}\n`;
                 info += `Дата: ${new Date(item.created_at).toLocaleString()}\n`;
                 info += `--------------------------\n`;
                 info += `РЕЗУЛЬТАТЫ:\n`;

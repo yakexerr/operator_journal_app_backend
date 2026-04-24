@@ -24,3 +24,8 @@ document.addEventListener('DOMContentLoaded', async function() {
         console.error('Ошибка загрузки профиля:', err);
     }
 });
+
+document.getElementById('logoutBtn').addEventListener('click', function() {
+    localStorage.removeItem('userLogin'); // Стираем ключ
+    window.location.href = '/authPage.html'; // Отправляем на вход
+});

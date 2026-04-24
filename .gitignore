@@ -24,3 +24,7 @@ users.db
 *.njsproj
 *.sln
 *.sw?
+
+
+jslesson
+src_old

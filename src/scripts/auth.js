@@ -27,10 +27,10 @@ document.getElementById('loginForm').addEventListener('submit', function(e) {
     .then(async response => {
         const data = await response.json();
         if (response.ok) {
-            localStorage.setItem('login', data.login); // Для приветствия 
-            localStorage.setItem('userLogin', login);     // Сохраняем логин для запросов в БД
-            // Теперь сервер присылает login
-            localStorage.setItem('login', data.login); 
+            localStorage.setItem('jwt_token', data.token); 
+
+            localStorage.setItem('userLogin', login); // Сохраняем для запросов
+            localStorage.setItem('userName', data.user.name); // Для приветствия
             
             messageSpan.style.color = "green";
             messageSpan.textContent = "Вход выполнен! Переходим...";

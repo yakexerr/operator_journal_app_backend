@@ -1,6 +1,18 @@
 import Database from "better-sqlite3";
+import bcrypt from "bcrypt"
 
 const db = new Database('users.db')
+
+// таблица для того чтобы знать кто на какой скважине
+db.exec(`
+    CREATE TABLE IF NOT EXISTS well_assignments (
+      objectId INTEGER PRIMARY KEY,
+      userId INTEGER NOT NULL,
+      FOREIGN KEY (userId) REFERENCES users(id)
+    )
+`);
+
+db.exec(`CREATE TABLE IF NOT EXISTS objects (id INTEGER PRIMARY KEY, name TEXT NOT NULL)`);
 
 db.exec(`
     CREATE TABLE IF NOT EXISTS users (
@@ -9,21 +21,25 @@ db.exec(`
       lastname TEXT NOT NULL,
       position TEXT NOT NULL,
       login TEXT NOT NULL,
-      password TEXT NOT NULL
+      password TEXT NOT NULL,
+      is_active INTEGER DEFAULT 1, -- 1 - работает, 0 - уволен/отстранен
+      shift_start TEXT,            -- Дата начала вахты (ГГГГ-ММ-ДД)
+      shift_end TEXT               -- Дата конца вахты
     )
     `);
 
 db.exec(`
     CREATE TABLE IF NOT EXISTS reports (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        taskId INTEGER NOT NULL,
+        taskId INTEGER,
         title TEXT NOT NULL,
-        status TEXT NOT NULL DEFAULT 'draft',
+        status TEXT NOT NULL DEFAULT 'new',
         description TEXT NOT NULL,
         objectId INTEGER NOT NULL,
         objectName TEXT,
+        assignedTo INTEGER,
         created_at TEXT
-      )
+    )
     `);
 
 db.exec(`
@@ -50,29 +66,51 @@ db.exec(`
 
 // это объект-синглтон - по сути готовый экземпляр с методами (похоже на статический класс)
 export const dbActions = {
-    saveUser: (user) => {
-        // prepare типа сохраняет шаблон и благодаря нему мы можем выполнять insert.run
+    saveUser: async (user) => {
+        const saltRounds = 10;
+        const hashedPassword = await bcrypt.hash(user.password, saltRounds);
+        
         const insert = db.prepare(`
-            INSERT INTO users (name, lastname, position, login, password)
-             VALUES (?,?,?,?,?)    
+            INSERT INTO users (name, lastname, position, login, password, is_active, shift_start, shift_end)
+            VALUES (?, ?, ?, ?, ?, 1, ?, ?)
         `);
+
         return insert.run(
-            user.name,
-            user.lastname,
-            user.position,
-            user.login,
-            user.password,
+            user.name, 
+            user.lastname, 
+            user.position, 
+            user.login, 
+            hashedPassword, 
+            user.shift_start, 
+            user.shift_end
         );
     },
 
     getUsers: () => {
-        const rows = db.prepare('SELECT * FROM users ORDER BY id DESC').all();
-        return rows;
+        // Соединяем таблицу пользователей с таблицей привязок скважин
+        const stmt = db.prepare(`
+            SELECT 
+                users.*, 
+                well_assignments.objectId 
+            FROM users 
+            LEFT JOIN well_assignments ON users.id = well_assignments.userId
+            ORDER BY users.id DESC
+        `);
+        return stmt.all();
     },
 
-    findUser: (username, password) => {
-        const isFind = db.prepare('SELECT * FROM users WHERE login = ? AND password = ?');
-        return isFind.get(username, password)
+    findUser: async (login, password) => {
+        const user = db.prepare(`
+            SELECT users.*, well_assignments.objectId 
+            FROM users 
+            LEFT JOIN well_assignments ON users.id = well_assignments.userId
+            WHERE users.login = ?
+        `).get(login);
+        
+        if (!user) return null;
+
+        const isMatch = await bcrypt.compare(password, user.password);
+        return isMatch ? user : null;
     },
 
     getUserData: (login) => {
@@ -136,8 +174,8 @@ export const dbActions = {
     // МЕТОД ДЛЯ СОЗДАНИЯ ЗАДАЧИ
     createTask: (task) => {
         const stmt = db.prepare(`
-            INSERT INTO reports (taskId, title, status, description, objectId, objectName)
-            VALUES (?, ?, ?, ?, ?, ?) -- Добавили 6-й знак вопроса
+            INSERT INTO reports (taskId, title, status, description, objectId, objectName, assignedTo)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
         `);
         return stmt.run(
             task.taskId,
@@ -145,7 +183,8 @@ export const dbActions = {
             task.status || 'new',
             task.description,
             task.objectId,
-            task.objectName
+            task.objectName,
+            task.assignedTo
         );
     },
     
@@ -175,7 +214,87 @@ export const dbActions = {
     },
 
     // этот метод для телефона (ему нужны только новые)
-    getNewTasksOnly: () => {
-        return db.prepare("SELECT * FROM reports WHERE status = 'new'").all();
-    }
+    getNewTasksOnly: (userId) => {
+        // Ищем только новые задачи именно для этого оператора
+        return db.prepare("SELECT * FROM reports WHERE status = 'new' AND assignedTo = ?").all(userId);
+    },
+
+    // узнать, кто отвечает за объект
+    getAssignedUser: (objectId) => {
+        const stmt = db.prepare('SELECT userId FROM well_assignments WHERE objectId = ?');
+        const res = stmt.get(objectId);
+        return res ? res.userId : null;
+    },
+
+    // метод для "заправки" чтобы потестить
+    assignWellToUser: (objectId, userId) => {
+        // Используем транзакцию, чтобы всё прошло как одна операция
+        const transaction = db.transaction(() => {
+            // Сначала удаляем ВСЕ старые привязки этого пользователя
+            // Чтобы у него не могло быть две скважины одновременно
+            db.prepare('DELETE FROM well_assignments WHERE userId = ?').run(userId);
+
+            // Удаляем привязку этой скважины к кому-то другому (если там кто-то был)
+            // Чтобы на одной скважине не было двух операторов
+            db.prepare('DELETE FROM well_assignments WHERE objectId = ?').run(objectId);
+
+            // Создаем новую чистую привязку
+            db.prepare('INSERT INTO well_assignments (objectId, userId) VALUES (?, ?)').run(objectId, userId);
+        });
+
+        return transaction();
+    },
+
+    getUserById: (id) => {
+        return db.prepare('SELECT * FROM users WHERE id = ?').get(id);
+    },
+
+    deactivateUser: (id) => {
+        return db.prepare('UPDATE users SET is_active = 0 WHERE id = ?').run(id);
+    },
+
+    updateShift: (id, shift_start, shift_end) => {
+        // Явно указываем, какие колонки обновляем
+        const stmt = db.prepare('UPDATE users SET shift_start = ?, shift_end = ? WHERE id = ?');
+        return stmt.run(shift_start, shift_end, id);
+    },
+
+    updateUserWellAndShift: (userId, newObjectId, shift_start, shift_end) => {
+        const updateTransaction = db.transaction(() => {
+            // 1. Обновляем даты вахты у пользователя
+            db.prepare('UPDATE users SET shift_start = ?, shift_end = ? WHERE id = ?')
+            .run(shift_start, shift_end, userId);
+
+            // 2. Удаляем старую привязку ЭТОГО пользователя (где бы он ни был раньше)
+            db.prepare('DELETE FROM well_assignments WHERE userId = ?').run(userId);
+
+            // 3. Удаляем привязку ЭТОЙ скважины (если там был кто-то другой)
+            // Это предотвратит ошибку UNIQUE constraint
+            db.prepare('DELETE FROM well_assignments WHERE objectId = ?').run(newObjectId);
+
+            // 4. Создаем новую чистую привязку
+            db.prepare('INSERT INTO well_assignments (objectId, userId) VALUES (?, ?)')
+            .run(newObjectId, userId);
+        });
+
+        return updateTransaction();
+    },
+
+    getCalculationsByWell: (objectId) => {
+        return db.prepare('SELECT * FROM calculations WHERE objectId = ? ORDER BY created_at DESC').all(objectId);
+    },
+
+    updateUserShift: (id, start, end) => {
+        const stmt = db.prepare('UPDATE users SET shift_start = ?, shift_end = ? WHERE id = ?');
+        return stmt.run(start, end, id);
+    },
+
+    updateUserStatus: (id, status) => {
+        const stmt = db.prepare('UPDATE users SET is_active = ? WHERE id = ?');
+        return stmt.run(status, id);
+    },
+
+    getObjects: () => db.prepare("SELECT * FROM objects").all(),
+
+    
 }
